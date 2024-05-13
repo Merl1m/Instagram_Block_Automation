@@ -1,5 +1,5 @@
 # Instagram Block Automation
-# Version 1.0
+# Version 1.1
 
 '''
 For #Blockout2024
@@ -16,6 +16,7 @@ Instructions
 4. Install the required modules using pip in command prompt
 5. Run the code
 '''
+
 # Modules
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -30,15 +31,14 @@ from time import sleep
 
 from random import choice
 
-from pyautogui import typewrite
-
 # Vars
 DRIVER = ".\Driver\chromedriver.exe"
 BRAVE = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
 LINK = "http://www.instagram.com"
+PROFILE = "http://www.instagram.com/{0}"
 
-USERNAME = "" # UPDATE ME
-PASSWORD = "" # UPDATE ME
+USERNAME = "" # Update Me
+PASSWORD = "" # Update Me
 
 Random_Wait_Times = [x/1000 for x in range(1000, 5001)]
 
@@ -47,7 +47,6 @@ with open('Accounts_To_Block.txt', 'r') as File_Obj:
 
 # XPATH Vars
 Search_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[2]"""
-First_Result_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/a[1]/div[1]/div/div/div[2]"""
 Follow_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[2]/div/div[1]"""
 Three_Dots_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[3]/div/div"""
 Block_Button_XPATH = """/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div/button[1]"""
@@ -67,20 +66,16 @@ def RandWait():
     Wait_Time = choice(Random_Wait_Times)
     sleep(Wait_Time)
 
-def Block(USER):
-    Search_Button = Browser.find_element(By.XPATH, Search_Button_XPATH)
-    Search_Button.click()
-    RandWait()
-
-    typewrite(USER)
-    sleep(4)
-
-    First_Result = Browser.find_element(By.XPATH, First_Result_XPATH)
-    First_Result.click()
-    WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Follow_Button_XPATH)))
+def Block(USER_LINK):
+    Browser.get(USER_LINK)
+    WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Three_Dots_XPATH)))
     RandWait()
 
     Follow_Button = Browser.find_element(By.XPATH, Follow_Button_XPATH)
+    if str(Follow_Button.text) == "Unblock":
+        RandWait()
+        return None
+    
     RandWait()
     
     Three_Dots = Browser.find_element(By.XPATH, Three_Dots_XPATH)
@@ -97,7 +92,7 @@ def Block(USER):
     
     Browser.get(LINK)
     WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
-
+    return True
 # Automation Process
 Browser.get(LINK)
 
@@ -117,7 +112,12 @@ RandWait()
 
 Flag = True
 for User in To_Block:
-    Block(User)
+    Val = Block(PROFILE.format(User))
+    if Val == None:
+        print(f"{User} Already Blocked")
+        Browser.get(LINK)
+        WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
+
     if Flag:
         Flag = False
         Notification_Not_Now = Browser.find_element(By.CLASS_NAME, "_a9_1")
