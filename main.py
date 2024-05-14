@@ -1,5 +1,5 @@
 # Instagram Block Automation
-# Version 1.1
+# Version 1.2
 
 '''
 For #Blockout2024
@@ -40,10 +40,13 @@ PROFILE = "http://www.instagram.com/{0}"
 USERNAME = "" # Update Me
 PASSWORD = "" # Update Me
 
-Random_Wait_Times = [x/1000 for x in range(1000, 5001)]
+Random_Wait_Times = [x/1000 for x in range(2000, 5001)]
 
 with open('Accounts_To_Block.txt', 'r') as File_Obj:
     To_Block = [user.strip('\n') for user in File_Obj.readlines()]
+
+Counter = 0
+WaitTime = 300
 
 # XPATH Vars
 Search_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[2]"""
@@ -112,17 +115,27 @@ RandWait()
 
 Flag = True
 for User in To_Block:
-    Val = Block(PROFILE.format(User))
-    if Val == None:
-        print(f"{User} Already Blocked")
+    try:
+        Val = Block(PROFILE.format(User))
+        if Val == None:
+            print(f"{User} Already Blocked")
+            Browser.get(LINK)
+            WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
+        else:
+            Counter += 1
+    except Exception as Error:
         Browser.get(LINK)
         WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
-
+        RandWait()
     if Flag:
         Flag = False
         Notification_Not_Now = Browser.find_element(By.CLASS_NAME, "_a9_1")
         Notification_Not_Now.click()
     RandWait()
+    
+    if Counter == 10:
+        Counter = 0
+        sleep(WaitTime)
 
 #Quit
 sleep(15)
