@@ -21,3 +21,7 @@ You can block all sorts of ads and trackers; well upto 99.5 % of ads.
 Chrome Driver: https://chromedriver.chromium.org/
 Edge Driver: https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/?ch=1&form=MA13LH
 
+### Credits to anonymous instagram user with the username 'blockout.2022' for the block list of celebrities
+You can participate in the operation blockout2024 manually by blocking all accounts in the following list of user **blockout.2022**
+
+
