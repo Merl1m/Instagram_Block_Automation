@@ -1,5 +1,5 @@
 # Instagram Block Automation
-# Version 1.2
+# Version 1.3
 
 '''
 For #Blockout2024
@@ -29,7 +29,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from time import sleep
 
-from random import choice
+from random import choice, randint
 
 # Vars
 DRIVER = ".\Driver\chromedriver.exe"
@@ -40,13 +40,13 @@ PROFILE = "http://www.instagram.com/{0}"
 USERNAME = "" # Update Me
 PASSWORD = "" # Update Me
 
-Random_Wait_Times = [x/1000 for x in range(2000, 5001)]
+Random_Wait_Times = [x/1000 for x in range(2000, 6001)]
 
 with open('Accounts_To_Block.txt', 'r') as File_Obj:
     To_Block = [user.strip('\n') for user in File_Obj.readlines()]
 
 Counter = 0
-WaitTime = 300
+WaitTime = randint(200, 400)
 
 # XPATH Vars
 Search_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[2]"""
@@ -58,6 +58,7 @@ Block_Confirm_XPATH = """/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div
 # Chrome Options
 Chrome_Options = webdriver.ChromeOptions()
 Chrome_Options.add_argument("--incognito")
+Chrome_Options.add_argument("--enable-chrome-browser-cloud-management")
 Chrome_Options.binary_location = BRAVE
 
 # Initialisation
@@ -96,6 +97,7 @@ def Block(USER_LINK):
     Browser.get(LINK)
     WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
     return True
+
 # Automation Process
 Browser.get(LINK)
 
@@ -124,6 +126,7 @@ for User in To_Block:
         else:
             Counter += 1
     except Exception as Error:
+        print(Error)
         Browser.get(LINK)
         WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
         RandWait()
