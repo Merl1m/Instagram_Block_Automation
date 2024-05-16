@@ -1,5 +1,5 @@
 # Instagram Block Automation
-# Version 1.3
+# Version 1.4
 
 '''
 For #Blockout2024
@@ -50,10 +50,13 @@ WaitTime = randint(200, 400)
 
 # XPATH Vars
 Search_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[2]"""
-Follow_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[2]/div/div[1]"""
-Three_Dots_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[3]/div/div"""
+# OLD # Follow_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[2]/div/div[1]"""
+# OLD # Three_Dots_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[3]/div/div"""
 Block_Button_XPATH = """/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div/button[1]"""
 Block_Confirm_XPATH = """/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]/button[1]"""
+
+Follow_Button_XPATH = '''/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[2]/section/main/div/header/section/div[1]/div[2]/div/div/button'''
+Three_Dots_XPATH = '''/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[2]/section/main/div/header/section/div[1]/div[3]/div'''
 
 # Chrome Options
 Chrome_Options = webdriver.ChromeOptions()
