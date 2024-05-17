@@ -6,6 +6,8 @@ currently driver with this script is chrome driver version 124, the script is us
 
 To use the script, just follow the instructions on the python script file (top section)
 
+The script is still experimental. you may come accross a common error of invalid xpath, must mannually get the xpath from instagram web application, mainly for follow button xpath and three dots button xpath. 
+
 # Operation Blockout2024
 **Fellow Supporters of Palestine, I have designed this script to help you automate blocking celebrities. Let those celebrities regret their silence in return for little bit green paper. Let them know your power. Let them know who you are and what you can do.**
 
