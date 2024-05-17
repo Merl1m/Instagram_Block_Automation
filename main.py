@@ -1,11 +1,13 @@
 # Instagram Block Automation
-# Version 1.4
+# Version 1.5
 
 '''
 For #Blockout2024
 A Script crafted to automate blocking users on instagram
 This script uses brave browser with chromium version 124
 If you are a Palestine supporter and a developer, feel free to fork the code and make it better
+This script is still experimental and can cause errors while running,
+if you are getting xpath error, update the xpath variables below with the new xpath from instagram web.
 '''
 
 '''
@@ -31,6 +33,8 @@ from time import sleep
 
 from random import choice, randint
 
+from os import listdir
+
 # Vars
 DRIVER = ".\Driver\chromedriver.exe"
 BRAVE = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
@@ -42,6 +46,12 @@ PASSWORD = "" # Update Me
 
 Random_Wait_Times = [x/1000 for x in range(2000, 6001)]
 
+Blocked_List_Exists = False
+Blocked = []
+
+if 'blocked_list.txt' in listdir():
+    Blocked_List_Exists = True
+
 with open('Accounts_To_Block.txt', 'r') as File_Obj:
     To_Block = [user.strip('\n') for user in File_Obj.readlines()]
 
@@ -49,14 +59,19 @@ Counter = 0
 WaitTime = randint(200, 400)
 
 # XPATH Vars
-Search_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[2]"""
+'''These variables are updatable, you can update them if these xpath doesn't work'''
 # OLD # Follow_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[2]/div/div[1]"""
 # OLD # Three_Dots_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[3]/div/div"""
-Block_Button_XPATH = """/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div/button[1]"""
-Block_Confirm_XPATH = """/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]/button[1]"""
+# OLD # Block_Button_XPATH = """/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div/button[1]"""
+# OLD # Block_Confirm_XPATH = """/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]/button[1]"""
+# OLD # Follow_Button_XPATH = '''/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[2]/section/main/div/header/section/div[1]/div[2]/div/div/button'''
+# OLD # Three_Dots_XPATH = '''/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[2]/section/main/div/header/section/div[1]/div[3]/div'''
 
-Follow_Button_XPATH = '''/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[2]/section/main/div/header/section/div[1]/div[2]/div/div/button'''
-Three_Dots_XPATH = '''/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[2]/section/main/div/header/section/div[1]/div[3]/div'''
+Search_Button_XPATH = """/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[2]"""
+Three_Dots_XPATH = '''/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[2]/section/main/div/header/section[2]/div/div/div[3]/div/div'''
+Block_Button_XPATH = '''/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/button[1]'''
+Follow_Button_XPATH = '''/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[2]/section/main/div/header/section[2]/div/div/div[2]/div/div[1]'''
+Block_Confirm_XPATH = '''/html/body/div[7]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]/button[1]'''
 
 # Chrome Options
 Chrome_Options = webdriver.ChromeOptions()
@@ -69,6 +84,22 @@ service = Service(executable_path=DRIVER)
 Browser = webdriver.Chrome(service=service, options=Chrome_Options)
 
 # Functions
+def New_Blocked_List(List):
+    with open('blocked_list.txt', 'w') as File_Obj:
+        [File_Obj.write(element + '\n') for element in List]
+
+def Retrive_Blocked_List():
+    with open('blocked_list.txt', 'r') as File_Obj:
+        Data = [element.strip('\n') for element in File_Obj.readlines()]
+    return Data
+
+def New_List():
+    New = []
+    for element in To_Block:
+        if element not in Blocked:
+            New.append(element)
+    return New
+
 def RandWait():
     Wait_Time = choice(Random_Wait_Times)
     sleep(Wait_Time)
@@ -87,20 +118,27 @@ def Block(USER_LINK):
     
     Three_Dots = Browser.find_element(By.XPATH, Three_Dots_XPATH)
     Three_Dots.click()
+    WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Block_Button_XPATH)))
     RandWait()
     
     Block_Button = Browser.find_element(By.XPATH, Block_Button_XPATH)
     Block_Button.click()
+    WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Block_Confirm_XPATH)))
     RandWait()
     
     Block_Confirm = Browser.find_element(By.XPATH, Block_Confirm_XPATH)
     Block_Confirm.click()
     sleep(4)
-    
+        
     Browser.get(LINK)
     WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
     return True
 
+# Vars
+if Blocked_List_Exists:
+    Blocked = Retrive_Blocked_List()
+    To_Block = New_List()
+    
 # Automation Process
 Browser.get(LINK)
 
@@ -119,30 +157,52 @@ WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Searc
 RandWait()
 
 Flag = True
+
+print("Press 'Ctrl + c' to stop")
+
 for User in To_Block:
     try:
         Val = Block(PROFILE.format(User))
         if Val == None:
             print(f"{User} Already Blocked")
+            Blocked.append(User)
             Browser.get(LINK)
             WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
-        else:
+        elif Val == True:
+            Blocked.append(User)
             Counter += 1
+    
+    except KeyboardInterrupt:
+        print("[Ctrl + c] recieved.. stopping now!!")
+        New_Blocked_List(Blocked)
+        quit()
+    
     except Exception as Error:
         print(Error)
-        Browser.get(LINK)
-        WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
+        try:
+            Browser.get(LINK)
+            WebDriverWait(Browser, 10).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
+            RandWait()
+        except Exception as Error_2:
+            print(Error_2)
+            New_Blocked_List(Blocked)
+            quit()
+            
+    try:
+        if Flag:
+            Flag = False
+            Notification_Not_Now = Browser.find_element(By.CLASS_NAME, "_a9_1")
+            Notification_Not_Now.click()
         RandWait()
-    if Flag:
+    except Exception as Error:
         Flag = False
-        Notification_Not_Now = Browser.find_element(By.CLASS_NAME, "_a9_1")
-        Notification_Not_Now.click()
-    RandWait()
-    
-    if Counter == 10:
+        RandWait()
+
+    if Counter == 12:
         Counter = 0
         sleep(WaitTime)
 
 #Quit
 sleep(15)
 Browser.quit()
+New_Blocked_List(Blocked)
