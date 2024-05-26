@@ -12,11 +12,10 @@ if you are getting xpath error, update the xpath variables below with the new xp
 
 '''
 Instructions
-1. Update the username and password variables with your account credentials
-2. Either make changes according to your browser or install brave browser for easier use
-3. Update the account usernames in the file 'Accounts_To_Block.txt'
-4. Install the required modules using pip in command prompt
-5. Run the code
+1. Either make changes according to your browser or install brave browser for easier use
+2. Update the account usernames in the file 'Accounts_To_Block.txt'
+3. Install the required modules using pip in command prompt
+4. Run the code
 '''
 
 # Modules
