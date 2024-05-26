@@ -1,5 +1,5 @@
 # Instagram Block Automation
-# Version 1.5
+# Version 1.6
 
 '''
 For #Blockout2024
@@ -35,21 +35,23 @@ from random import choice, randint
 
 from os import listdir
 
+from stdiomask import getpass
+
 # Vars
 DRIVER = ".\Driver\chromedriver.exe"
 BRAVE = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
 LINK = "http://www.instagram.com"
 PROFILE = "http://www.instagram.com/{0}"
 
-USERNAME = "" # Update Me
-PASSWORD = "" # Update Me
+USERNAME = str(input("USERNAME: "))
+PASSWORD = getpass("PASSWORD: ", '*')
 
 Random_Wait_Times = [x/1000 for x in range(2000, 6001)]
 
 Blocked_List_Exists = False
 Blocked = []
 
-if 'blocked_list.txt' in listdir():
+if f'{USERNAME}.txt' in listdir():
     Blocked_List_Exists = True
 
 with open('Accounts_To_Block.txt', 'r') as File_Obj:
@@ -85,11 +87,11 @@ Browser = webdriver.Chrome(service=service, options=Chrome_Options)
 
 # Functions
 def New_Blocked_List(List):
-    with open('blocked_list.txt', 'w') as File_Obj:
+    with open(f'{USERNAME}.txt', 'w') as File_Obj:
         [File_Obj.write(element + '\n') for element in List]
 
 def Retrive_Blocked_List():
-    with open('blocked_list.txt', 'r') as File_Obj:
+    with open(f'{USERNAME}.txt', 'r') as File_Obj:
         Data = [element.strip('\n') for element in File_Obj.readlines()]
     return Data
 
@@ -172,6 +174,20 @@ for User in To_Block:
             Blocked.append(User)
             Counter += 1
     
+        try:
+            if Flag:
+                Flag = False
+                Notification_Not_Now = Browser.find_element(By.CLASS_NAME, "_a9_1")
+                Notification_Not_Now.click()
+            RandWait()
+        except Exception as Error:
+            Flag = False
+            RandWait()
+
+        if Counter == 12:
+            Counter = 0
+            sleep(WaitTime)
+    
     except KeyboardInterrupt:
         print("[Ctrl + c] recieved.. stopping now!!")
         New_Blocked_List(Blocked)
@@ -188,19 +204,7 @@ for User in To_Block:
             New_Blocked_List(Blocked)
             quit()
             
-    try:
-        if Flag:
-            Flag = False
-            Notification_Not_Now = Browser.find_element(By.CLASS_NAME, "_a9_1")
-            Notification_Not_Now.click()
-        RandWait()
-    except Exception as Error:
-        Flag = False
-        RandWait()
-
-    if Counter == 12:
-        Counter = 0
-        sleep(WaitTime)
+    
 
 #Quit
 sleep(15)
