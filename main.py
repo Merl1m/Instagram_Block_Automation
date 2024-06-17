@@ -1,13 +1,13 @@
 # Instagram Block Automation
-# Version 1.7
+# Version 1.8
 
 '''
 For #Blockout2024
 A Script crafted to automate blocking users on instagram
-This script uses brave browser with chromium version 124
+This script uses brave browser with chromium version 126
 If you are a Palestine supporter and a developer, feel free to fork the code and make it better
 This script is still experimental and can cause errors while running,
-if you are getting xpath error, update the xpath variables below with the new xpath from instagram web.
+If the script throws errors, look at the error in the log-file in log directory.
 '''
 
 '''
@@ -48,6 +48,8 @@ Config = loads(Config_Json)
 
 Buffer = Config['Buffer']
 Standard_Wait = Config['Standard_Wait']
+Buffer_Wait_Lower = Config["Buffer_Wait_Lower"]
+Buffer_Wait_Upper = Config["Buffer_Wait_Upper"]
 
 DRIVER = ".\Driver\chromedriver.exe"
 BRAVE = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
@@ -69,7 +71,7 @@ with open('res\Accounts_To_Block.txt', 'r') as File_Obj:
     To_Block = [user.strip('\n') for user in File_Obj.readlines()]
 
 Counter = 0
-WaitTime = randint(200, 400)
+WaitTime = randint(Buffer_Wait_Lower, Buffer_Wait_Upper)
 
 # XPATH Vars
 with open('res\\xpath.json', 'r') as File_Obj:
@@ -123,10 +125,14 @@ def RandWait():
 
 def Block(USER_LINK):
     Browser.get(USER_LINK)
-    WebDriverWait(Browser, Standard_Wait).until(EC.presence_of_element_located((By.XPATH, Three_Dots_XPATH)))
-    RandWait()
-
-    Follow_Button = Browser.find_element(By.XPATH, Follow_Button_XPATH)
+    
+    try:
+        WebDriverWait(Browser, Standard_Wait * 2).until(EC.presence_of_element_located((By.XPATH, Three_Dots_XPATH)))
+        RandWait()
+        Follow_Button = Browser.find_element(By.XPATH, Follow_Button_XPATH)
+    except Exception as Error:
+        return "404"
+    
     if str(Follow_Button.text) == "Unblock":
         RandWait()
         return None
@@ -188,7 +194,9 @@ for User in To_Block:
         elif Val == True:
             Blocked.append(User)
             Counter += 1
-    
+        elif Val == "404":
+            print(f"{User} | Account not found (unable to locate button elements)")
+        
         try:
             if Flag:
                 Flag = False
