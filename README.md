@@ -2,7 +2,7 @@
 This script let's you automate blocking users on instagram.
 
 Make sure your browser version and driver version is same.
-Driver with this script is chrome driver version 124, the script is using brave broswer. you can tweak it to your needs.
+Driver with this script is chrome driver version 126, the script is using brave broswer. you can tweak it to your needs.
 
 To use the script, just follow the instructions on the python script file (top section)
 
