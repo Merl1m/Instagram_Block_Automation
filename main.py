@@ -18,6 +18,7 @@ Instructions
 4. Run the code
 '''
 
+
 # Modules
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -48,6 +49,7 @@ Config = loads(Config_Json)
 
 Buffer = Config['Buffer']
 Standard_Wait = Config['Standard_Wait']
+Increased_Wait = Config['Increased_Wait']
 Buffer_Wait_Lower = Config["Buffer_Wait_Lower"]
 Buffer_Wait_Upper = Config["Buffer_Wait_Upper"]
 
@@ -127,7 +129,7 @@ def Block(USER_LINK):
     Browser.get(USER_LINK)
     
     try:
-        WebDriverWait(Browser, Standard_Wait * 2).until(EC.presence_of_element_located((By.XPATH, Three_Dots_XPATH)))
+        WebDriverWait(Browser, Increased_Wait).until(EC.presence_of_element_located((By.XPATH, Three_Dots_XPATH)))
         RandWait()
         Follow_Button = Browser.find_element(By.XPATH, Follow_Button_XPATH)
     except Exception as Error:
@@ -153,8 +155,6 @@ def Block(USER_LINK):
     Block_Confirm.click()
     sleep(4)
         
-    Browser.get(LINK)
-    WebDriverWait(Browser, Standard_Wait).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
     return True
 
 # Vars
@@ -179,8 +179,6 @@ Password_Input_Element.send_keys(Keys.ENTER)
 WebDriverWait(Browser, Standard_Wait).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
 RandWait()
 
-Flag = True
-
 print("Press 'Ctrl + c' to stop")
 
 for User in To_Block:
@@ -189,24 +187,14 @@ for User in To_Block:
         if Val == None:
             print(f"{User} Already Blocked")
             Blocked.append(User)
-            Browser.get(LINK)
-            WebDriverWait(Browser, Standard_Wait).until(EC.presence_of_element_located((By.XPATH, Search_Button_XPATH)))
+
         elif Val == True:
             Blocked.append(User)
             Counter += 1
+            
         elif Val == "404":
             print(f"{User} | Account not found (unable to locate button elements)")
         
-        try:
-            if Flag:
-                Flag = False
-                Notification_Not_Now = Browser.find_element(By.CLASS_NAME, "_a9_1")
-                Notification_Not_Now.click()
-            RandWait()
-        except Exception as Error:
-            Flag = False
-            RandWait()
-
         if Counter == Buffer:
             Counter = 0
             sleep(WaitTime)
