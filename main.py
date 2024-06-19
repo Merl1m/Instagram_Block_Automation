@@ -13,9 +13,8 @@ If the script throws errors, look at the error in the log-file in log directory.
 '''
 Instructions
 1. Either make changes according to your browser or install brave browser for easier use
-2. Update the account usernames in the file 'Accounts_To_Block.txt'
-3. Install the required modules using pip in command prompt
-4. Run the code
+2. Install the required modules using pip in command prompt
+3. Run the code
 '''
 
 
