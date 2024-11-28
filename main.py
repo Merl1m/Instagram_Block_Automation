@@ -41,7 +41,7 @@ from datetime import datetime
 from json import loads
 
 # Vars
-with open('res\config.json', 'r') as File_Obj:
+with open('res/config.json', 'r') as File_Obj:
     Config_Json = File_Obj.read()
 
 Config = loads(Config_Json)
@@ -52,8 +52,9 @@ Increased_Wait = Config['Increased_Wait']
 Buffer_Wait_Lower = Config["Buffer_Wait_Lower"]
 Buffer_Wait_Upper = Config["Buffer_Wait_Upper"]
 
-DRIVER = ".\Driver\chromedriver.exe"
-BRAVE = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
+DRIVER = "./Driver/chromedriver.exe"
+BRAVE = r"C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
+# CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 LINK = "http://www.instagram.com"
 PROFILE = "https://www.instagram.com/{0}"
 
@@ -68,7 +69,7 @@ Blocked = []
 if f'{USERNAME}.txt' in listdir('log'):
     Blocked_List_Exists = True
 
-with open('res\Accounts_To_Block.txt', 'r') as File_Obj:
+with open('res/Accounts_To_Block.txt', 'r') as File_Obj:
     To_Block = [user.strip('\n') for user in File_Obj.readlines()]
 
 Counter = 0
@@ -98,17 +99,17 @@ Browser = webdriver.Chrome(service=service, options=Chrome_Options)
 
 # Functions
 def New_Blocked_List(List):
-    with open(f'.\log\{USERNAME}.txt', 'w') as File_Obj:
+    with open(f'./log/{USERNAME}.txt', 'w') as File_Obj:
         [File_Obj.write(element + '\n') for element in List]
 
 def Retrive_Blocked_List():
-    with open(f'.\log\{USERNAME}.txt', 'r') as File_Obj:
+    with open(f'./log/{USERNAME}.txt', 'r') as File_Obj:
         Data = [element.strip('\n') for element in File_Obj.readlines()]
     return Data
 
 def log_error(ERROR):
-    Mode = 'a' if f'Error_Log_{USERNAME}.txt' in listdir('.\log') else 'w'
-    with open(f'.\log\Error_Log_{USERNAME}.txt', Mode) as File_Obj:
+    Mode = 'a' if f'Error_Log_{USERNAME}.txt' in listdir('./log') else 'w'
+    with open(f'./log/Error_Log_{USERNAME}.txt', Mode) as File_Obj:
         time = datetime.now()
         record_time = f"[{time.day}/{time.month}/{time.year} | {time.time().hour}:{time.time().minute}:{time.time().second}]"
         File_Obj.write(f"{record_time}\n---[Error Start Block]---\n{ERROR}\n---[Error End Block]---\n")
@@ -184,22 +185,26 @@ for User in To_Block:
     try:
         Val = Block(PROFILE.format(User))
         if Val == None:
-            print(f"{User} Already Blocked")
+            print(f"{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} {User} Already Blocked")
             Blocked.append(User)
+            Counter += 1
 
         elif Val == True:
+            print(f"{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} {User} blocked")
             Blocked.append(User)
             Counter += 1
             
         elif Val == "404":
-            print(f"{User} | Account not found (unable to locate button elements)")
+            print(f"{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} {User} | Account not found (unable to locate button elements)")
+            Blocked.append(User)
+            Counter += 1
         
         if Counter == Buffer:
             Counter = 0
             sleep(WaitTime)
     
     except KeyboardInterrupt:
-        print("[Ctrl + c] recieved.. stopping now!!")
+        print("[Ctrl + c] received.. stopping now!!")
         New_Blocked_List(Blocked)
         Browser.quit()
         quit()
