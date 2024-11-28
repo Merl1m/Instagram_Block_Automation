@@ -1,7 +1,7 @@
 {
-"Search_Button_XPATH" : "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div[2]/div[2]",
-"Three_Dots_XPATH" : "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[1]/section/main/div/header/section[2]/div/div/div[3]",
-"Block_Button_XPATH" : "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/button[1]",
-"Follow_Button_XPATH" : "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div[1]/section/main/div/header/section[2]/div/div/div[2]/div/div[1]",
-"Block_Confirm_XPATH" : "/html/body/div[7]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]/button[1]"
+    "Search_Button_XPATH": "/html/body/div/div/div/div/div[2]/div/div/div/div/div[2]/div/div/div/div/div[2]",
+    "Three_Dots_XPATH": "/html/body/div[2]/div/div/div/div[2]/div/div/div/div[2]/div/div/section/main/div/header/section[2]/div/div/div[3]",
+    "Block_Button_XPATH": "/html/body/div[5]/div/div/div[2]/div/div/div/div/div/button[1]",
+    "Follow_Button_XPATH": "/html/body/div[2]/div/div/div/div[2]/div/div/div/div[2]/div/div/section/main/div/header/section[2]/div/div/div[2]/div/div[1]",
+    "Block_Confirm_XPATH": "/html/body/div[6]/div/div/div[2]/div/div/div/div/div/div/div[2]/button[1]"
 }
