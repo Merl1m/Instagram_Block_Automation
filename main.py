@@ -1,5 +1,8 @@
 # Instagram Block Automation
-# Version 1.8
+# Version 1.9
+
+# Code Improvised by Saad BENBOUZID
+# Github : https://github.com/Macadoshis
 
 '''
 For #Blockout2024
@@ -185,17 +188,17 @@ for User in To_Block:
     try:
         Val = Block(PROFILE.format(User))
         if Val == None:
-            print(f"{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} {User} Already Blocked")
+            print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} {User} Already Blocked")
             Blocked.append(User)
             Counter += 1
 
         elif Val == True:
-            print(f"{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} {User} blocked")
+            print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} {User} blocked")
             Blocked.append(User)
             Counter += 1
             
         elif Val == "404":
-            print(f"{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} {User} | Account not found (unable to locate button elements)")
+            print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} {User} | Account not found (unable to locate button elements)")
             Blocked.append(User)
             Counter += 1
         
