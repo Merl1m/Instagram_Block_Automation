@@ -20,7 +20,8 @@ _By default, Brave blocks trackers & ads on the websites you visit, keeping you 
 You can block all sorts of ads and trackers; well upto 99.5 % of ads.
 
 ## Drivers
-Chrome Driver: https://chromedriver.chromium.org/
+Chrome Driver: https://chromedriver.chromium.org/ ([download page](https://googlechromelabs.github.io/chrome-for-testing/))
+
 Edge Driver: https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/?ch=1&form=MA13LH
 
 ### Credits to anonymous instagram user with the username 'blockout.2022' for the block list of celebrities
